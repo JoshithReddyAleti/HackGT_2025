@@ -17,6 +17,8 @@ export const ChatInputSchema = z.object({
   systemPrompt: z.string().optional(),
   streamController: z.instanceof(ReadableStreamDefaultController).optional(),
   additionalContext: z.any().optional(),
+  resourceId: z.string().optional(),
+  threadId: z.string().optional(),
 });
 
 export const ChatOutputSchema = z.object({
@@ -34,8 +36,16 @@ const callAgent = createStep({
   inputSchema: ChatInputSchema,
   outputSchema: ChatOutputSchema,
   execute: async ({ inputData }) => {
-    const { prompt, temperature, maxTokens, systemPrompt, streamController, additionalContext } =
-      inputData;
+    const {
+      prompt,
+      temperature,
+      maxTokens,
+      systemPrompt,
+      streamController,
+      additionalContext,
+      resourceId,
+      threadId,
+    } = inputData;
 
     if (!streamController) {
       throw new Error('Stream controller is required');
@@ -48,7 +58,10 @@ const callAgent = createStep({
     runtimeContext.set('additionalContext', additionalContext);
     runtimeContext.set('streamController', streamController);
 
-    const messages = [prompt, 'Additional context: ' + JSON.stringify(additionalContext)];
+    const messages = [
+      'User message: ' + prompt,
+      'Additional context (for background knowledge): ' + JSON.stringify(additionalContext),
+    ];
 
     let responseText = '';
     /**
@@ -64,6 +77,14 @@ const callAgent = createStep({
         maxOutputTokens: maxTokens,
       },
       runtimeContext,
+      ...(threadId && resourceId
+        ? {
+            memory: {
+              thread: threadId,
+              resource: resourceId,
+            },
+          }
+        : {}),
     });
 
     for await (const chunk of streamResult.fullStream) {

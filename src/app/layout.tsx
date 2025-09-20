@@ -27,7 +27,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <CedarCopilot llmProvider={llmProvider} messageRenderers={messageRenderers}>
+        <CedarCopilot
+          userId={'Test User'}
+          threadId={'Test Thread'}
+          llmProvider={llmProvider}
+          messageRenderers={messageRenderers}
+        >
           {children}
         </CedarCopilot>
       </body>

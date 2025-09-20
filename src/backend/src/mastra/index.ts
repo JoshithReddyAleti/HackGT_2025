@@ -1,8 +1,8 @@
 import { Mastra } from '@mastra/core/mastra';
-import { LibSQLStore } from '@mastra/libsql';
 import { chatWorkflow } from './workflows/chatWorkflow';
 import { apiRoutes } from './apiRegistry';
 import { starterAgent } from './agents/starterAgent';
+import { storage } from './memory';
 
 /**
  * Main Mastra configuration
@@ -14,12 +14,11 @@ import { starterAgent } from './agents/starterAgent';
  * - In-memory storage (replace with your preferred database)
  * - API routes for the frontend to communicate with
  */
+
 export const mastra = new Mastra({
   agents: { starterAgent },
   workflows: { chatWorkflow },
-  storage: new LibSQLStore({
-    url: ':memory:', // TODO: Replace with your database URL for persistence
-  }),
+  storage,
   telemetry: {
     enabled: true,
   },

@@ -2,6 +2,7 @@ import { openai } from '@ai-sdk/openai';
 import { Agent } from '@mastra/core/agent';
 import { ALL_TOOLS, TOOL_REGISTRY } from '../tools/toolDefinitions';
 import { generateCategorizedToolDescriptions } from '@cedar-os/backend';
+import { memory } from '../memory';
 
 /**
  * Example starter agent for Cedar-OS + Mastra applications
@@ -49,4 +50,5 @@ When responding:
   `,
   model: openai('gpt-4o-mini'),
   tools: Object.fromEntries(ALL_TOOLS.map((tool) => [tool.id, tool])),
+  memory,
 });
