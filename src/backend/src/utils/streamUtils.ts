@@ -44,6 +44,7 @@ export function createSSEStream(
  */
 export function streamJSONEvent<T>(
   controller: ReadableStreamDefaultController<Uint8Array>,
+  eventType: string,
   eventData: T,
 ) {
   const encoder = new TextEncoder();

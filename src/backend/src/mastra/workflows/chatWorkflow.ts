@@ -4,6 +4,7 @@
 // ---------------------------------------------
 
 import { createWorkflow, createStep } from '@mastra/core/workflows';
+import { RuntimeContext } from '@mastra/core/di';
 import { z } from 'zod';
 import { starterAgent } from '../agents/starterAgent';
 import { handleTextStream, streamJSONEvent } from '../../utils/streamUtils';
@@ -15,6 +16,7 @@ export const ChatInputSchema = z.object({
   maxTokens: z.number().optional(),
   systemPrompt: z.string().optional(),
   streamController: z.instanceof(ReadableStreamDefaultController).optional(),
+  additionalContext: z.any().optional(),
 });
 
 export const ChatOutputSchema = z.object({
@@ -32,7 +34,8 @@ const callAgent = createStep({
   inputSchema: ChatInputSchema,
   outputSchema: ChatOutputSchema,
   execute: async ({ inputData }) => {
-    const { prompt, temperature, maxTokens, systemPrompt, streamController } = inputData;
+    const { prompt, temperature, maxTokens, systemPrompt, streamController, additionalContext } =
+      inputData;
 
     if (!streamController) {
       throw new Error('Stream controller is required');
@@ -40,7 +43,12 @@ const callAgent = createStep({
 
     console.log('Chat workflow received input data', inputData);
 
-    const messages = [{ role: 'user' as const, content: prompt }];
+    // Create runtime context with additionalContext and streamController
+    const runtimeContext = new RuntimeContext();
+    runtimeContext.set('additionalContext', additionalContext);
+    runtimeContext.set('streamController', streamController);
+
+    const messages = [prompt, 'Additional context: ' + JSON.stringify(additionalContext)];
 
     let responseText = '';
     /**
@@ -55,6 +63,7 @@ const callAgent = createStep({
         temperature,
         maxOutputTokens: maxTokens,
       },
+      runtimeContext,
     });
 
     for await (const chunk of streamResult.fullStream) {
@@ -62,7 +71,7 @@ const callAgent = createStep({
         await handleTextStream(chunk.payload.text, streamController);
         responseText += chunk.payload.text;
       } else if (chunk.type === 'tool-result' || chunk.type === 'tool-call') {
-        streamJSONEvent(streamController, chunk);
+        streamJSONEvent(streamController, chunk.type, chunk);
       }
     }
 
