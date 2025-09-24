@@ -19,7 +19,7 @@ type ChatMode = 'floating' | 'sidepanel' | 'caption';
 export default function HomePage() {
   // Cedar-OS chat components with mode selector
   // Choose between caption, floating, or side panel chat modes
-  const [chatMode, setChatMode] = React.useState<ChatMode>('caption');
+  const [chatMode, setChatMode] = React.useState<ChatMode>('sidepanel');
 
   // Cedar state for the main text that can be changed by the agent
   const [mainText, setMainText] = React.useState('tell Cedar to change me');
