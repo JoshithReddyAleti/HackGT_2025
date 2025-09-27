@@ -1,30 +1,38 @@
-import evidenceData from '../mockData/evidence.json';
-import patientPrefsData from '../mockData/patientPrefs.json';
-import type { DrugAlert } from './evidenceAgent';
+import { openai } from '@ai-sdk/openai';
+import { Agent } from '@mastra/core/agent';
+import { ALL_TOOLS, TOOL_REGISTRY } from '../tools/toolDefinitions';
+import { generateCategorizedToolDescriptions } from '@cedar-os/backend';
+import { memory } from '../memory';
 
-export interface PatientPrefs {
-  patient_id: string;
-  pref_contact: string;
-  alert_quiet_hours: string;
-  intake_questions: string[];
-  intake_responses: string[];
-}
+export const notifierAgent = new Agent({
+  name: 'Notifier Agent',
+  instructions: `
+<role>
+You are a medical notifier.
+You surface high clinical alerts (new drugs, studies, critical labs, etc.), honoring user and patient notification preferences.
+</role>
 
-function isQuietHour(alertQuietHours: string): boolean {
-  // Example: "21:00–06:00"
-  const [start, end] = alertQuietHours.split('–').map(t => parseInt(t.split(':')[0], 10));
-  const nowHour = new Date().getHours();
-  if (start < end) {
-    return nowHour >= start && nowHour < end;
-  } else {
-    return nowHour >= start || nowHour < end;
-  }
-}
+<primary_function>
+- Push only high-value relevant alerts as requested
+- Use tools to fetch and summarize notifications, respecting quiet hours and preferences
+</primary_function>
 
-export function getNotifications(patientId: string): DrugAlert[] {
-  const evidence = (evidenceData as any[]).find(row => row.patient_id === patientId);
-  const prefs = (patientPrefsData as PatientPrefs[]).find(row => row.patient_id === patientId);
-  if (!evidence || !prefs) return [];
-  if (isQuietHour(prefs.alert_quiet_hours)) return [];
-  return (evidence.new_drug_alerts || []).filter((alert: DrugAlert) => alert.relevance === 'high');
-}
+<tools_available>
+You have access to:
+${generateCategorizedToolDescriptions(
+  TOOL_REGISTRY, Object.keys(TOOL_REGISTRY).reduce(
+    (acc, key) => { acc[key] = key; return acc; }, {} as Record<string, string>
+  ),
+)}
+</tools_available>
+
+<response_guidelines>
+- Summarize only top-priority notifications
+- Cite patient and provider notification schedules as appropriate
+</response_guidelines>
+`,
+  model: openai('gpt-4o-mini'),
+  tools: Object.fromEntries(ALL_TOOLS.map(tool => [tool.id, tool])),
+  memory,
+});
+
