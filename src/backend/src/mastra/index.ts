@@ -2,6 +2,11 @@ import { Mastra } from '@mastra/core/mastra';
 import { chatWorkflow } from './workflows/chatWorkflow';
 import { apiRoutes } from './apiRegistry';
 import { starterAgent } from './agents/starterAgent';
+import {emrAgent} from "./agents/emrAgent";
+import {evidenceAgent} from "./agents/evidenceAgent";
+import {notifierAgent} from "./agents/notifierAgent";
+import { questionnaireAgent } from './agents/questionnaireAgent';
+import {payerAgent} from "./agents/payerAgent";
 import { storage } from './memory';
 
 /**
@@ -16,7 +21,7 @@ import { storage } from './memory';
  */
 
 export const mastra = new Mastra({
-  agents: { starterAgent },
+  agents: { starterAgent, questionnaireAgent, emrAgent, evidenceAgent, notifierAgent, payerAgent},
   workflows: { chatWorkflow },
   storage,
   telemetry: {
