@@ -1,0 +1,28 @@
+[
+    {
+        "patient_id": "P2001",
+        "pref_contact": "sms",
+        "alert_quiet_hours": "21:00–06:00",
+        "intake_questions": [
+            "Do you wake up at night short of breath?",
+            "Have you gained >2kg in the last 3 days?"
+        ],
+        "intake_responses": [
+            "Yes, 2-3 times this week.",
+            "Yes, about 2.5kg in 3 days."
+        ]
+    },
+    {
+        "patient_id": "P2002",
+        "pref_contact": "email",
+        "alert_quiet_hours": "22:00–07:00",
+        "intake_questions": [
+            "Have you experienced palpitations?",
+            "Any chest pain in the last week?"
+        ],
+        "intake_responses": [
+            "No palpitations.",
+            "Mild chest pain after exercise."
+        ]
+    }
+]

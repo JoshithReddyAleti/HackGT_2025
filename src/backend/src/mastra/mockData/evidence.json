@@ -1,0 +1,48 @@
+[
+    {
+        "patient_id": "P2001",
+        "pubmed_ids": [
+            "39201482",
+            "39123766"
+        ],
+        "study_summaries": [
+            "RCT: SGLT2 inhibitors reduce HF hospitalizations in HFrEF.",
+            "Meta-analysis: ACE inhibitors lower mortality in heart failure."
+        ],
+        "new_drug_alerts": [
+            {
+                "drug": "Empagliflozin",
+                "relevance": "high",
+                "pubmed_link": "https://pubmed.ncbi.nlm.nih.gov/39201482/"
+            },
+            {
+                "drug": "Novel Diuretic X",
+                "relevance": "low",
+                "pubmed_link": "https://pubmed.ncbi.nlm.nih.gov/39123766/"
+            }
+        ],
+        "new_study_alerts": [
+            {
+                "condition": "heart failure",
+                "pubmed_link": "https://pubmed.ncbi.nlm.nih.gov/39201482/"
+            }
+        ]
+    },
+    {
+        "patient_id": "P2002",
+        "pubmed_ids": [
+            "39000001"
+        ],
+        "study_summaries": [
+            "Observational: Beta blockers improve outcomes in arrhythmia."
+        ],
+        "new_drug_alerts": [
+            {
+                "drug": "Bisoprolol",
+                "relevance": "high",
+                "pubmed_link": "https://pubmed.ncbi.nlm.nih.gov/39000001/"
+            }
+        ],
+        "new_study_alerts": []
+    }
+]

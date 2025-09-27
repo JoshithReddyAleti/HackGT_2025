@@ -1,0 +1,29 @@
+[
+    {
+        "patient_id": "P2001",
+        "age": 64,
+        "gender": "male",
+        "specialty": "cardiology",
+        "chief_complaint": "shortness of breath on exertion",
+        "symptoms": [
+            "fatigue",
+            "leg swelling",
+            "orthopnea"
+        ],
+        "diagnoses": [
+            "I50.9",
+            "I10"
+        ],
+        "medications": [
+            "Lisinopril 20mg",
+            "Furosemide 40mg"
+        ],
+        "lab_results": {
+            "BNP": 320,
+            "Creatinine": 1.2
+        },
+        "allergies": [
+            "Penicillin"
+        ]
+    }
+]

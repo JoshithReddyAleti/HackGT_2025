@@ -1,0 +1,22 @@
+[
+    {
+        "patient_id": "P2001",
+        "payer": "Aetna",
+        "candidate_codes": [
+            "93306",
+            "99214"
+        ],
+        "formulary_status": "PA_required",
+        "estimated_cost": 240.75
+    },
+    {
+        "patient_id": "P2002",
+        "payer": "Blue Cross",
+        "candidate_codes": [
+            "93000",
+            "99213"
+        ],
+        "formulary_status": "covered",
+        "estimated_cost": 120.50
+    }
+]
