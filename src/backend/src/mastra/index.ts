@@ -7,6 +7,7 @@ import {evidenceAgent} from "./agents/evidenceAgent";
 import {notifierAgent} from "./agents/notifierAgent";
 import { questionnaireAgent } from './agents/questionnaireAgent';
 import {payerAgent} from "./agents/payerAgent";
+import { summaryGenAgent } from './agents/SummaryGen';
 import { storage } from './memory';
 
 /**
@@ -21,7 +22,7 @@ import { storage } from './memory';
  */
 
 export const mastra = new Mastra({
-  agents: { starterAgent, questionnaireAgent, emrAgent, evidenceAgent, notifierAgent, payerAgent},
+  agents: { starterAgent,summaryGenAgent,  questionnaireAgent, emrAgent, evidenceAgent, notifierAgent, payerAgent},
   workflows: { chatWorkflow },
   storage,
   telemetry: {
