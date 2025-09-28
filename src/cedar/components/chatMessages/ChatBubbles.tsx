@@ -7,11 +7,13 @@ import ChatRenderer from './ChatRenderer';
 interface ChatBubblesProps {
 	maxHeight?: string; // e.g., "300px", "60vh", or undefined for flex-1
 	className?: string; // Additional classes for the container
+	onAddToContentStream?: (content: string) => void;
 }
 
 export const ChatBubbles: React.FC<ChatBubblesProps> = ({
 	maxHeight,
 	className = '',
+	onAddToContentStream,
 }) => {
 	const containerRef = useRef<HTMLDivElement>(null);
 	const isProcessing = useCedarStore((state) => state.isProcessing);
@@ -85,7 +87,10 @@ export const ChatBubbles: React.FC<ChatBubblesProps> = ({
 							className={`flex ${
 								message.role === 'user' ? 'justify-end' : 'justify-start'
 							} ${isConsecutiveMessage(index) ? 'mt-1' : 'mt-2'}`}>
-							<ChatRenderer message={message} />
+							<ChatRenderer 
+								message={message} 
+								onAddToContentStream={onAddToContentStream}
+							/>
 						</motion.div>
 					))}
 					{isProcessing && (

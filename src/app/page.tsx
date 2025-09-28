@@ -8,7 +8,8 @@ import {
   useSubscribeStateToAgentContext,
 } from 'cedar-os';
 
-import { ChatModeSelector } from '@/components/ChatModeSelector';
+import { NeuralHeader } from '@/components/NeuralHeader';
+import { StatusDashboard } from '@/components/StatusDashboard';
 import { CedarCaptionChat } from '@/cedar/components/chatComponents/CedarCaptionChat';
 import { FloatingCedarChat } from '@/cedar/components/chatComponents/FloatingCedarChat';
 import { SidePanelCedarChat } from '@/cedar/components/chatComponents/SidePanelCedarChat';
@@ -22,7 +23,7 @@ export default function HomePage() {
   const [chatMode, setChatMode] = React.useState<ChatMode>('sidepanel');
 
   // Cedar state for the main text that can be changed by the agent
-  const [mainText, setMainText] = React.useState('tell Cedar to change me');
+  const [mainText, setMainText] = React.useState('Most advanced AI Intelligence Interface');
 
   // Cedar state for dynamically added text lines
   const [textLines, setTextLines] = React.useState<string[]>([]);
@@ -82,59 +83,37 @@ export default function HomePage() {
   });
 
   const renderContent = () => (
-    <div className="relative h-screen w-full">
-      <ChatModeSelector currentMode={chatMode} onModeChange={setChatMode} />
+    <div className="min-h-screen">
+      <NeuralHeader currentMode={chatMode} onModeChange={setChatMode} />
 
-      {/* Main interactive content area */}
-      <div className="flex flex-col items-center justify-center min-h-[60vh] p-8 space-y-8">
-        {/* Big text that Cedar can change */}
-        <div className="text-center">
-          <h1 className="text-6xl font-bold text-gray-800 mb-4">{mainText}</h1>
-          <p className="text-lg text-gray-600 mb-8">
-            This text can be changed by Cedar using state setters
-          </p>
+      {/* Main Dashboard Content */}
+      <main className="pt-24 px-6 pb-12">
+        <div className="max-w-7xl mx-auto">
+          <StatusDashboard 
+            mainText={mainText}
+            textLines={textLines}
+            onTextLinesClear={() => setTextLines([])}
+          />
         </div>
+      </main>
 
-        {/* Instructions for adding new text */}
-        <div className="text-center">
-          <h2 className="text-2xl font-semibold text-gray-700 mb-2">
-            tell cedar to add new lines of text to the screen
-          </h2>
-          <p className="text-md text-gray-500 mb-6">
-            Cedar can add new text using frontend tools with different styles
-          </p>
-        </div>
-
-        {/* Display dynamically added text lines */}
-        {textLines.length > 0 && (
-          <div className="w-full max-w-2xl">
-            <h3 className="text-xl font-medium text-gray-700 mb-4 text-center">Added by Cedar:</h3>
-            <div className="space-y-2">
-              {textLines.map((line, index) => (
-                <div
-                  key={index}
-                  className="p-3 bg-blue-50 border border-blue-200 rounded-lg text-center"
-                >
-                  {line.startsWith('**') && line.endsWith('**') ? (
-                    <strong className="text-blue-800">{line.slice(2, -2)}</strong>
-                  ) : line.startsWith('*') && line.endsWith('*') ? (
-                    <em className="text-blue-700">{line.slice(1, -1)}</em>
-                  ) : line.startsWith('🌟') ? (
-                    <span className="text-yellow-600 font-semibold">{line}</span>
-                  ) : (
-                    <span className="text-blue-800">{line}</span>
-                  )}
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-      </div>
-
-      {chatMode === 'caption' && <CedarCaptionChat />}
+      {chatMode === 'caption' && (
+        <CedarCaptionChat 
+          onAddToContentStream={(content: string) => {
+            setTextLines((prev) => [...prev, content])
+          }}
+        />
+      )}
 
       {chatMode === 'floating' && (
-        <FloatingCedarChat side="right" title="Cedarling Chat" collapsedLabel="Chat with Cedar" />
+        <FloatingCedarChat 
+          side="right" 
+          title="Neural AI Chat" 
+          collapsedLabel="Connect to Neural Interface" 
+          onAddToContentStream={(content: string) => {
+            setTextLines((prev) => [...prev, content])
+          }}
+        />
       )}
     </div>
   );
@@ -146,6 +125,9 @@ export default function HomePage() {
         title="Cedarling Chat"
         collapsedLabel="Chat with Cedar"
         showCollapsedButton={true}
+        onAddToContentStream={(content: string) => {
+          setTextLines((prev) => [...prev, content])
+        }}
       >
         <DebuggerPanel />
         {renderContent()}

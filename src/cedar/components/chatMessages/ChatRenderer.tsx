@@ -3,6 +3,7 @@ import MarkdownRenderer from '@/cedar/components/chatMessages/MarkdownRenderer';
 import MultipleChoice from '@/cedar/components/chatMessages/MultipleChoice';
 import TodoList from '@/cedar/components/chatMessages/TodoList';
 import Flat3dContainer from '@/cedar/components/containers/Flat3dContainer';
+import MessageActions from '@/cedar/components/MessageActions';
 import {
 	DialogueOptionsMessage,
 	Message,
@@ -17,9 +18,10 @@ import React from 'react';
 
 interface ChatRendererProps {
 	message: Message;
+	onAddToContentStream?: (content: string) => void;
 }
 
-export const ChatRenderer: React.FC<ChatRendererProps> = ({ message }) => {
+export const ChatRenderer: React.FC<ChatRendererProps> = ({ message, onAddToContentStream }) => {
 	const getMessageRenderers = useCedarStore(
 		(state) => state.getMessageRenderers
 	);
@@ -133,10 +135,13 @@ export const ChatRenderer: React.FC<ChatRendererProps> = ({ message }) => {
 		}
 
 		default:
+			const isAssistantMessage = message.role === 'bot' || message.role === 'assistant';
+			const isSystemMessage = message.content?.startsWith('✅') || message.content?.startsWith('❌') || message.content?.startsWith('📝');
+			
 			return (
 				<div
 					className={`${
-						message.role === 'bot' || message.role === 'assistant'
+						isAssistantMessage
 							? 'max-w-[100%] w-full'
 							: 'max-w-[80%] w-fit'
 					}`}>
@@ -148,6 +153,25 @@ export const ChatRenderer: React.FC<ChatRendererProps> = ({ message }) => {
 							}
 						/>
 					</div>
+					
+					{/* Add approve/reject/edit actions for assistant messages */}
+					{isAssistantMessage && !isSystemMessage && message.content && (
+						<MessageActions 
+							message={message}
+							onApprove={() => {
+								console.log('Response approved:', message.content)
+							}}
+							onReject={() => {
+								console.log('Response rejected:', message.content)
+							}}
+							onEdit={(newContent: string) => {
+								console.log('Response edited from:', message.content, 'to:', newContent)
+							}}
+							onAddToStream={(content: string) => {
+								onAddToContentStream?.(content)
+							}}
+						/>
+					)}
 				</div>
 			);
 	}

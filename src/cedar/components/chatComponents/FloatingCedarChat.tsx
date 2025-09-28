@@ -24,6 +24,7 @@ interface FloatingCedarChatProps {
   resizable?: boolean;
   showThreadController?: boolean;
   stream?: boolean; // Whether to use streaming for responses
+  onAddToContentStream?: (content: string) => void; // Callback to add content to dashboard stream
 }
 
 export const FloatingCedarChat: React.FC<FloatingCedarChatProps> = ({
@@ -38,6 +39,7 @@ export const FloatingCedarChat: React.FC<FloatingCedarChatProps> = ({
   showThreadController = false,
   resizable = true,
   stream = true,
+  onAddToContentStream,
 }) => {
   // Get showChat state and setShowChat from store
   const showChat = useCedarStore((state) => state.showChat);
@@ -86,7 +88,7 @@ export const FloatingCedarChat: React.FC<FloatingCedarChatProps> = ({
 
           {/* Chat messages - takes up remaining space */}
           <div className="flex-1 min-h-0 overflow-hidden">
-            <ChatBubbles />
+            <ChatBubbles onAddToContentStream={onAddToContentStream} />
           </div>
 
           {/* Chat input - fixed at bottom */}

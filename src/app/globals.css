@@ -44,25 +44,33 @@
 }
 
 :root {
-  --radius: 0.625rem;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
+  --radius: 0.75rem;
+  --background: #0f0f23;
+  --foreground: #e2e8f0;
+  --card: #1e1b4b;
+  --card-foreground: #f1f5f9;
+  
+  /* Neural Theme Colors */
+  --neural-bg: #0a0a0f;
+  --neural-surface: #1a1a2e;
+  --neural-accent: #00ff88;
+  --neural-secondary: #16213e;
+  --neural-text: #e2e8f0;
+  --neural-glow: rgba(0, 255, 136, 0.3);
+  --popover: #1e1b4b;
+  --popover-foreground: #f1f5f9;
+  --primary: #6366f1;
+  --primary-foreground: #f8fafc;
+  --secondary: #312e81;
+  --secondary-foreground: #e2e8f0;
+  --muted: #1e293b;
+  --muted-foreground: #94a3b8;
+  --accent: #a78bfa;
+  --accent-foreground: #1e1b4b;
+  --destructive: #ef4444;
+  --border: #334155;
+  --input: #334155;
+  --ring: #6366f1;
   --chart-1: oklch(0.646 0.222 41.116);
   --chart-2: oklch(0.6 0.118 184.704);
   --chart-3: oklch(0.398 0.07 227.392);
@@ -79,24 +87,24 @@
 }
 
 .dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
+  --background: #030712;
+  --foreground: #f1f5f9;
+  --card: #0f172a;
+  --card-foreground: #f8fafc;
+  --popover: #0f172a;
+  --popover-foreground: #f8fafc;
+  --primary: #8b5cf6;
+  --primary-foreground: #f8fafc;
+  --secondary: #1e293b;
+  --secondary-foreground: #f1f5f9;
+  --muted: #0f172a;
+  --muted-foreground: #64748b;
+  --accent: #a78bfa;
+  --accent-foreground: #030712;
+  --destructive: #dc2626;
+  --border: #1e293b;
+  --input: #1e293b;
+  --ring: #8b5cf6;
   --chart-1: oklch(0.488 0.243 264.376);
   --chart-2: oklch(0.696 0.17 162.48);
   --chart-3: oklch(0.769 0.188 70.08);
@@ -112,11 +120,66 @@
   --sidebar-ring: oklch(0.556 0 0);
 }
 
+/* Neural interface effects */
+@keyframes neural-pulse {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 1; }
+}
+
+@keyframes neural-glow {
+  0%, 100% { 
+    box-shadow: 0 0 20px rgba(99, 102, 241, 0.3);
+  }
+  50% { 
+    box-shadow: 0 0 30px rgba(99, 102, 241, 0.6), 0 0 60px rgba(99, 102, 241, 0.2);
+  }
+}
+
+@keyframes data-flow {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+.neural-pulse { animation: neural-pulse 2s ease-in-out infinite; }
+.neural-glow { animation: neural-glow 3s ease-in-out infinite; }
+.data-flow { animation: data-flow 4s linear infinite; }
+
+/* Gradient backgrounds */
+.neural-bg {
+  background: linear-gradient(135deg, #0f0f23 0%, #1e1b4b 50%, #312e81 100%);
+}
+
+.card-gradient {
+  background: linear-gradient(145deg, rgba(30, 27, 75, 0.8), rgba(49, 46, 129, 0.4));
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(99, 102, 241, 0.2);
+}
+
+/* Neural Theme Utilities */
+.neural-bg {
+  background: linear-gradient(135deg, var(--neural-bg) 0%, var(--neural-surface) 100%);
+}
+
+.neural-surface {
+  background: var(--neural-surface);
+}
+
+.neural-glass {
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  background: rgba(26, 26, 46, 0.8);
+  border: 1px solid rgba(0, 255, 136, 0.2);
+}
+
 @layer base {
   * {
-    @apply border-border outline-ring/50;
+    border-color: var(--border);
+    outline-color: color-mix(in srgb, var(--ring) 50%, transparent);
   }
   body {
-    @apply bg-background text-foreground;
+    background: linear-gradient(135deg, var(--neural-bg) 0%, var(--neural-surface) 100%);
+    color: var(--foreground);
+    min-height: 100vh;
+    font-family: var(--font-sans);
   }
 }

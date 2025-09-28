@@ -24,6 +24,7 @@ interface CedarCaptionChatProps {
 	className?: string;
 	showThinking?: boolean;
 	stream?: boolean; // Whether to use streaming for responses
+	onAddToContentStream?: (content: string) => void; // Callback to add content to dashboard stream
 }
 
 export const CedarCaptionChat: React.FC<CedarCaptionChatProps> = ({
@@ -31,6 +32,7 @@ export const CedarCaptionChat: React.FC<CedarCaptionChatProps> = ({
 	className = '',
 	showThinking = true,
 	stream = true,
+	onAddToContentStream,
 }) => {
 	// Always false since buttons do nothing
 	const hasDiffs = false;
@@ -152,7 +154,10 @@ export const CedarCaptionChat: React.FC<CedarCaptionChatProps> = ({
 
 				<Container3D className='p-2'>
 					<div className='w-full pb-3'>
-						<CaptionMessages showThinking={showThinking} />
+						<CaptionMessages 
+							showThinking={showThinking} 
+							onAddToContentStream={onAddToContentStream}
+						/>
 					</div>
 
 					<ChatInput className='bg-transparent p-0' stream={stream} />

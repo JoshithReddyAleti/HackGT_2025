@@ -15,14 +15,17 @@ import { ShimmerText } from '@/cedar/components/text/ShimmerText';
 import KeyboardShortcut from '@/cedar/components/ui/KeyboardShortcut';
 import Slider from '@/cedar/components/ui/Slider3D';
 import { TypewriterText } from '@/cedar/components/text/TypewriterText';
+import MessageActions from '@/cedar/components/MessageActions';
 
 interface CaptionMessagesProps {
 	showThinking?: boolean;
 	className?: string;
+	onAddToContentStream?: (content: string) => void;
 }
 
 const CaptionMessages: React.FC<CaptionMessagesProps> = ({
 	className = '',
+	onAddToContentStream,
 }) => {
 	const { messages } = useMessages();
 
@@ -75,6 +78,9 @@ const CaptionMessages: React.FC<CaptionMessagesProps> = ({
 	switch (latestMessage.type) {
 		case 'text':
 			const textSizeClass = getTextSizeClass(latestMessage.content);
+			const isAssistantMessage = latestMessage.role === 'assistant' || latestMessage.role === 'bot';
+			const isSystemMessage = latestMessage.content.startsWith('✅') || latestMessage.content.startsWith('❌') || latestMessage.content.startsWith('📝');
+			
 			return (
 				<div className={containerClasses}>
 					<div className={`font-semibold ${textSizeClass}`}>
@@ -85,6 +91,25 @@ const CaptionMessages: React.FC<CaptionMessagesProps> = ({
 							renderAsMarkdown={true}
 						/>
 					</div>
+					
+					{/* Add approve/reject/edit actions for assistant messages */}
+					{isAssistantMessage && !isSystemMessage && (
+						<MessageActions 
+							message={latestMessage}
+							onApprove={() => {
+								console.log('Response approved:', latestMessage.content)
+							}}
+							onReject={() => {
+								console.log('Response rejected:', latestMessage.content)
+							}}
+							onEdit={(newContent: string) => {
+								console.log('Response edited from:', latestMessage.content, 'to:', newContent)
+							}}
+							onAddToStream={(content: string) => {
+								onAddToContentStream?.(content)
+							}}
+						/>
+					)}
 				</div>
 			);
 

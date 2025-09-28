@@ -24,6 +24,7 @@ interface SidePanelCedarChatProps {
 	className?: string; // Additional CSS classes for positioning
 	topOffset?: number; // Top offset in pixels (e.g., for navbar height)
 	stream?: boolean; // Whether to use streaming for responses
+	onAddToContentStream?: (content: string) => void; // Callback to add content to dashboard stream
 }
 
 export const SidePanelCedarChat: React.FC<SidePanelCedarChatProps> = ({
@@ -42,6 +43,7 @@ export const SidePanelCedarChat: React.FC<SidePanelCedarChatProps> = ({
 	className = '',
 	topOffset = 0,
 	stream = true,
+	onAddToContentStream,
 }) => {
 	// Get showChat state and setShowChat from store
 	const showChat = useCedarStore((state) => state.showChat);
@@ -94,7 +96,7 @@ export const SidePanelCedarChat: React.FC<SidePanelCedarChatProps> = ({
 
 						{/* Chat messages - takes up remaining space */}
 						<div className='flex-1 min-h-0 overflow-hidden'>
-							<ChatBubbles />
+							<ChatBubbles onAddToContentStream={onAddToContentStream} />
 						</div>
 
 						{/* Chat input - fixed at bottom */}
