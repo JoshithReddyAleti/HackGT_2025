@@ -1,134 +1,136 @@
-# Cedar-OS + Mastra Starter Template
+# TaskForceAI
 
-A blank starter template combining [Cedar-OS](https://cedar.ai) for the frontend AI interface and [Mastra](https://mastra.ai) for the backend agent orchestration.
+A generative AI-powered healthcare copilot built at HackGT!
 
-## Features
+---
 
-- **🤖 AI Chat Integration**: Built-in chat workflows powered by OpenAI through Mastra agents
-- **⚡ Real-time Streaming**: Server-sent events (SSE) for streaming AI responses
-- **🎨 Beautiful UI**: Cedar-OS components with 3D effects and modern design
-- **🔧 Type-safe Workflows**: Mastra-based backend with full TypeScript support
-- **📡 Dual API Modes**: Both streaming and non-streaming chat endpoints
+## 🚑 Problem Statement
 
-## Quick Start
+Healthcare professionals are drowning in EMR screens, insurance confusion, and notification overload. Critical insights and evidence get buried, workflows get messy, and burnout is real. Providers need *clarity, context, and more time for patients*—not just more data.
 
-The fastest way to get started:
+---
 
-```bash
-npx cedar-os-cli plant-seed
-```
+## 🌟 Solution Overview
 
-Then select this template when prompted. This will set up the entire project structure and dependencies automatically.
+TaskForceAI is an ecosystem of 7 intelligent, orchestrated AI agents that deliver clinical, cost, and research context—auto-magically and on demand.  
+Built with:
+- **Impiricus** (clinical + billing brain)
+- **CedarOS** (agentic, modern interface)
+- **Mastra/Ergo** (agent orchestration engine)
 
-This template contains the Cedar chat connected to a mastra backend to demonstrate what endpoints need to be implemented.
+---
 
-For more details, see the [Cedar Getting Started Guide](https://docs.cedarcopilot.com/getting-started/getting-started).
+## 🧠 Agent Functionalities (What Each Agent Does)
 
-## Manual Setup
+| Agent Name             | Functionality                                                                         |
+|------------------------|---------------------------------------------------------------------------------------|
+| **Questionnaire Agent**| Collects patient intake, pre-visit data, preferences                                  |
+| **EMR Agent**          | Parses and summarizes full patient EMR: demographics, history, diagnoses, allergies, meds, labs, health trends |
+| **Payer Agent**        | Retrieves payer, coverage, cost estimate, prior-auth status, real-time billing clarity|
+| **Notifier Agent**     | Surfaces only the most critical alerts, fighting alert fatigue                        |
+| **Evidence Agent**     | Finds and summarizes the latest clinical studies and guidance for any given scenario  |
+| **SummaryGen Agent**   | Auto-creates complete visit/clinical briefings with EMR, payer, evidence, and trends when appointments are booked |
+| **StarterAgent**       | Main orchestrator—routes user queries, triggers agent workflows, and answers on demand|
 
-### Prerequisites
+---
 
-- Node.js 18+
-- OpenAI API key
-- pnpm (recommended) or npm
+## 📑 Data & Mock Integration
 
-### Installation
+We integrated and showcased **2500 test patients** with real clinical structure from Mocarro & Kaggle:
+- Preprocessed in Python: handled missing (NAN) values, normalized fields
+- Key fields used:  
+  - `patient_id, age, gender, specialty, chief_complaint, symptoms, diagnoses, medications, lab_results, allergies, insurance details, intake preferences`
+- This rich dataset allows instant agent demo for:
+  - EMR chart review
+  - Insurance/cost workflow
+  - Real-time evidence
+  - Longitudinal (multi-visit) tracking
 
-1. **Clone and install dependencies:**
+---
 
-```bash
-git clone <repository-url>
-cd cedar-mastra-starter
-pnpm install && cd src/backend && pnpm install && cd ../..
-```
+## 🛠️ Setup
 
-2. **Set up environment variables:**
-   Create a `.env` file in the root directory:
+### 1. Clone the repository
 
-```env
-OPENAI_API_KEY=your-openai-api-key-here
-```
+git clone https://github.com/JoshithReddyAleti/HackGT_2025.git
+cd (go into the cloned folder)
 
-3. **Start the development servers:**
+### 2. Install pnpm globally (if needed)
 
-```bash
-npm run dev
-```
+npm install -g pnpm
 
-This runs both the Next.js frontend and Mastra backend concurrently:
+### 3. Install dependencies
 
-- Frontend: http://localhost:3000
-- Backend API: http://localhost:4111
+#### Frontend
+cd src/app
+pnpm install
 
-## Project Architecture
+#### Backend
+cd ../../src/backend
+pnpm install
 
-### Frontend (Next.js + Cedar-OS)
+### 4. Configure Environment Variables
 
-- **Simple Chat UI**: See Cedar OS components in action in a pre-configured chat interface
-- **Cedar-OS Components**: Cedar-OS Components installed in shadcn style for local changes
-- **Tailwind CSS, Typescript, NextJS**: Patterns you're used to in any NextJS project
+- Go to the project root
+- Create a `.env` file and add your OpenAI/Mastra API key:
 
-### Backend (Mastra)
+OPENAI_API_KEY=your_real_api_key_here
 
-- **Chat Workflow**: Example of a Mastra workflow – a chained sequence of tasks including LLM calls
-- **Streaming Utils**: Examples of streaming text, status updates, and objects like tool calls
-- **API Routes**: Examples of registering endpoint handlers for interacting with the backend
 
-## API Endpoints (Mastra backend)
+### 5. Learn by example:
 
-### Non-streaming Chat
+**Highly recommended:**  
+Before diving in, please review:
 
-```bash
-POST /chat/execute-function
-Content-Type: application/json
+- **CEDAR_CHAT_ENHANCEMENTS.md**
+- **Cedar-OS + Mastra Starter Template.md**
+- **CLINICAL_COPILOT_IMPLEMENTATION.md**
 
-{
-  "prompt": "Hello, how can you help me?",
-  "temperature": 0.7,
-  "maxTokens": 1000,
-  "systemPrompt": "You are a helpful assistant."
-}
-```
+These documents explain advanced agent orchestration, UI/UX enhancements, and system implementation details.
 
-### Streaming Chat
+## ▶️ How to Run the Project
 
-```bash
-POST /chat/execute-function/stream
-Content-Type: application/json
+- Start both backend and frontend
+- Open your browser to `http://localhost:3000`
+- Open your browser to `http://localhost:4111/agents` too see backend agents
+- Enjoy interactive, agentic healthcare dashboards with all features live.
 
-{
-  "prompt": "Tell me a story",
-  "temperature": 0.7
-}
-```
+---
 
-Returns Server-Sent Events with:
+## 💡 Sample Prompts for Demo
 
-- **JSON Objects**: `{ type: 'stage_update', status: 'update_begin', message: 'Generating response...'}`
-- **Text Chunks**: Streamed AI response text
-- **Completion**: `event: done` signal
+Copy into the chat or dashboard to see all agents in action!
 
-## Development
+- **Relevant Literature & Studies**  
+  `Find and summarize the most recent studies related to [patient complaint: chest pain]. Include PubMed IDs.`
+- **EMR Case Reports**  
+  `Search EMR records for similar patient case reports matching [diabetes + hypertension]. Summarize outcomes.`
+- **Drug / Treatment Relevance**  
+  `Check if [drug: Metformin XR] is relevant to Dr. Smith’s prescribing history. Return supporting rationale.`
+- **Health Trends (Highlighted Section in Screenshot)**  
+  `Analyze patient EMR. Highlight recurring health trends and conditions that should be addressed in today’s visit.`
+- **Commercial Potential**  
+  `Simulate insurer + provider workflow for verifying cost estimation of [treatment: knee replacement] across major payers. Output comparison in table.`  
+  - Accept / Reject / Edit feature supported.
 
-### Running the Project
+---
 
-```bash
-# Start both frontend and backend
-npm run dev
+## ✨ Features
 
-# Run frontend only
-npm run dev:next
+- EMR chart lookup and summary for any test patient (from 2,500 real records)
+- Insurance/cost analysis and comparison workflows
+- Real-time evidence/research matching
+- Visit summary & health trend highlights
+- Modular agent orchestration and smart notifications
+- Adaptive learning, accepts user corrections or edits
 
-# Run backend only
-npm run dev:mastra
-```
+## 🔔 Necessity of TaskForceAI
 
-## Learn More
+Healthcare's data overload, alert fatigue, and complex cost/coverage issues demand more than just more software—they require real-time, adaptive agentic intelligence. TaskForceAI unifies EMR, billing, evidence, notifications, and workflow orchestration at the clinician interface, unlocking faster, safer, smarter medicine for providers and patients alike.
 
-- [Cedar-OS Documentation](https://docs.cedarcopilot.com/)
-- [Mastra Documentation](https://mastra.ai/docs)
-- [Next.js Documentation](https://nextjs.org/docs)
+## 📞 Support / Issues
 
-## License
+Open an issue here, or reach out directly on LinkedIn!
+Joshith Reddy Aleti : https://www.linkedin.com/in/joshith-reddy-aleti/
 
-MIT License - see LICENSE file for details.
+Let's bring sanity, clarity, and joy back to healthcare—one agentic copilot at a time.
