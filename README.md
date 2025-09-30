@@ -94,7 +94,7 @@ These documents explain advanced agent orchestration, UI/UX enhancements, and sy
 
 ## ▶️ How to Run the Project
 
-- Start both backend and frontend : npm run dev
+- Start both backend and frontend : `npm run dev`
 - Open your browser to `http://localhost:3000`
 - Open your browser to `http://localhost:4111/agents` to see backend agents
 - Enjoy interactive, agentic healthcare dashboards with all features live
